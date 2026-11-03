@@ -10,8 +10,22 @@ create table if not exists public.tickets (
   raw_text text,
   priority text not null default 'medium' check (priority in ('low','medium','high')),
   status text not null default 'open' check (status in ('open','in_progress','resolved')),
+  student_email text,
+  incharge_name text,
+  incharge_role text,
+  incharge_email text,
+  incharge_phone text,
+  incharge_office text,
   created_at timestamptz not null default now()
 );
+
+-- Ensure all columns exist if table was already created
+alter table public.tickets add column if not exists student_email text;
+alter table public.tickets add column if not exists incharge_name text;
+alter table public.tickets add column if not exists incharge_role text;
+alter table public.tickets add column if not exists incharge_email text;
+alter table public.tickets add column if not exists incharge_phone text;
+alter table public.tickets add column if not exists incharge_office text;
+
 create index if not exists tickets_created_at_idx on public.tickets (created_at desc);
 alter table public.tickets enable row level security;
--- No public RLS policies: browser clients cannot access the table directly.
