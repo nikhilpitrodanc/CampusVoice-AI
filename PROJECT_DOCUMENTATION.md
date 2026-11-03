@@ -94,3 +94,4 @@ As the sole developer and architect of this project, I handled 100% of the end-t
 - **Database:** Supabase (PostgreSQL with RLS)
 - **Version Control & CI/CD:** GitHub, Vercel Automated Deployments
 - **License:** MIT License (Copyright © 2026 Nikhil Pitroda)
+
