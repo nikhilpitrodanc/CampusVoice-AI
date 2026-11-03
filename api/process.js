@@ -362,6 +362,7 @@ async function interpretAudio(base64Audio, mimeType, interimText = '') {
 
   const cleanMime = mimeType ? mimeType.split(';')[0] : 'audio/webm';
   let speechTranscript = (interimText || '').trim();
+  let isQuotaExceeded = false;
 
   // STEP 1: Dedicated Audio Speech-to-Text Transcription with Gemini 3.5 Flash
   try {
@@ -382,7 +383,9 @@ async function interpretAudio(base64Audio, mimeType, interimText = '') {
       })
     });
 
-    if (transcribeRes.ok) {
+    if (transcribeRes.status === 429) {
+      isQuotaExceeded = true;
+    } else if (transcribeRes.ok) {
       const transcribeData = await transcribeRes.json();
       const rawText = transcribeData.candidates?.[0]?.content?.parts?.map(x => x.text || '').join('').trim();
       if (rawText && !/^silent\.?$/i.test(rawText) && rawText.length > 2) {
@@ -434,7 +437,9 @@ async function interpretAudio(base64Audio, mimeType, interimText = '') {
         })
       });
 
-      if (response.ok) {
+      if (response.status === 429) {
+        isQuotaExceeded = true;
+      } else if (response.ok) {
         const data = await response.json();
         const content = data.candidates?.[0]?.content?.parts?.map(x => x.text || '').join('');
         if (content) {
@@ -447,6 +452,17 @@ async function interpretAudio(base64Audio, mimeType, interimText = '') {
     } catch (err) {
       console.warn(`Fallback audio model ${model} failed:`, err);
     }
+  }
+
+  if (isQuotaExceeded) {
+    return {
+      intent: 'unknown',
+      lang: 'en',
+      ticket: null,
+      ticketNumber: null,
+      transcript: speechTranscript || '',
+      reply: 'Your Gemini API key has exceeded its daily free quota limit on Google AI Studio. Please generate a fresh API key at aistudio.google.com/apikey and update GEMINI_API_KEY in Vercel.'
+    };
   }
 
   return {
