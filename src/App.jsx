@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import logoImg from './assets/logo.png';
 import {
   Activity,
   ArrowRight,
@@ -742,9 +743,7 @@ export default function App() {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-icon">
-            <Activity size={23} />
-          </div>
+          <img src={logoImg} alt="CampusVoice AI" className="brand-logo-img" />
           <div>
             <strong>
               CampusVoice<span> AI</span>
