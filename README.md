@@ -1,101 +1,177 @@
-# CampusVoice AI — Vocal Labs Hackathon MVP
+# CampusVoice AI 🎙️🏛️
+### *Voice-First AI Campus Assistant & Automated Grievance Desk*
 
-**Speak. Understand. Act.** A voice-first campus grievance assistant built with React, Google Gemini and Supabase. A spoken complaint produces a *real, persisted* service ticket and a spoken confirmation. Tickets are visible in a dashboard and can be updated to Open, In progress, or Resolved. This is the merged release of the initial MVP and the additional implementation notes.
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20Vercel-success?style=for-the-badge&logo=vercel)](https://campusvoice-ai-gules.vercel.app)
+[![React](https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Gemini](https://img.shields.io/badge/Google%20Gemini%203.5-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://aistudio.google.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-## Features
+**Speak. Understand. Act.**  
+CampusVoice AI is a voice-first intelligent assistant built for university students. Speak natural complaints or academic queries into the browser; Gemini 3.5 understands your speech verbatim, resolves semester doubts, and automatically registers structured tickets routed to official campus in-charges with instant email receipt generation.
 
-- Browser microphone transcription (Chrome recommended, English/Hindi/Gujarati language selector).
-- Gemini structured intent extraction, category/priority/location/description classification, automatic department assignment.
-- Actual Supabase ticket inserts; ticket number, listing, status lookup and status updates.
-- Browser voice confirmation with Web SpeechSynthesis; Hindi, Gujarati and English responses.
-- Voice question: "How many tickets are open?" uses an exact Supabase count.
-- Responsive dashboard, text fallback, visible loading and error states.
-- No secret keys in the frontend or repository.
+---
 
-## Prerequisites
+## 🌟 Key Features
 
+- **🎙️ Real-Time Voice Activity & Streaming Speech Recognition**
+  - Live verbatim word-for-word speech transcription displayed on screen as you speak.
+  - Intelligent pause and sentence-end detection with automatic submission — no need to tap stop.
+  - Transient noise filter to eliminate mouse click / trackpad tap interference.
+
+- **🧠 Google Gemini 3.5 Intelligence**
+  - Multimodal 2-stage audio speech-to-text pipeline.
+  - Automatic categorization across Maintenance, Cleanliness, IT, Hostel, Academic, Library, and Safety.
+  - Priority triage (High / Medium / Low) with immediate escalation for exams or hazards.
+  - Comprehensive Academic Guidance: Answers questions on semester rules, 75% attendance policy, grading scales, and syllabus.
+
+- **🛡️ 24/7 Confidential Anti-Ragging & Bullying Safety Desk**
+  - Instant zero-tolerance detection for distress, ragging, or safety concerns.
+  - Immediate routing to Chief Security Officer Capt. Vikram Singh and confidential welfare helpline (`1800-180-5522`).
+
+- **🏛️ Department In-Charge Routing & Receipts**
+  - Automatically matches and dispatches tickets to specific campus authorities:
+    - **Facilities & Maintenance:** Rajesh Verma (`facilities.incharge@campusvoice.edu`)
+    - **Housekeeping & Sanitation:** Sunil Patil (`housekeeping.incharge@campusvoice.edu`)
+    - **IT & Wi-Fi:** Prof. Anita Sharma (`it.incharge@campusvoice.edu`)
+    - **Hostel & Mess:** Dr. K. Ramanathan (`hostel.warden@campusvoice.edu`)
+    - **Central Library:** Dr. Meera Sen (`library.incharge@campusvoice.edu`)
+    - **Academic Affairs:** Dean Dr. Sanjeev Kapoor (`academics.incharge@campusvoice.edu`)
+  - Floating top receipt banner with a smooth 7-second vanishing timer and tracking links.
+
+- **🔊 Confident Male Voice Synthesis**
+  - High-clarity, professional voice responses via Web SpeechSynthesis with pitch and cadence tuning.
+
+- **🌐 Multi-Lingual Support**
+  - Native language handling for English, Hindi (हिन्दी / Hinglish), and Gujarati (ગુજરાતી).
+
+- **⚡ Cloud Database Persistence with Supabase**
+  - Real-time PostgreSQL ticket persistence, ticket search, and status tracking (`Open` ➔ `In Progress` ➔ `Resolved`).
+  - Seamless automatic fallback for missing schema columns.
+
+---
+
+## 🚀 Live Demo
+
+- **Production URL:** [https://campusvoice-ai-gules.vercel.app](https://campusvoice-ai-gules.vercel.app)
+- **Supported Browsers:** Google Chrome, Microsoft Edge, Brave, Safari, Firefox.
+
+---
+
+## 🏗️ Architecture & Workflow
+
+```mermaid
+flowchart TD
+    User["Student Speaks Complaint / Question"] --> Mic["Browser Audio & WebSpeech Engine"]
+    Mic --> VAD["Sentence Completion & Pause Detection"]
+    VAD --> Serverless["Vercel Serverless Function (/api/process)"]
+    Serverless --> Gemini["Google Gemini 3.5 Flash"]
+    Gemini --> DB["Supabase PostgreSQL (public.tickets)"]
+    Gemini --> Mail["In-Charge Dispatch & Tracking Receipt"]
+    Serverless --> UI["Live UI Update + Male Speech Confirmation"]
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend Framework** | React 19, Vite 6 |
+| **Styling & Icons** | Vanilla CSS3 (Custom Apple/Siri Glassmorphic Theme), Lucide React |
+| **AI / LLM** | Google Gemini 3.5 Flash via Google Generative AI REST API |
+| **Audio & Speech** | Web Speech API, Web Audio Analyser, MediaStream Recording API |
+| **Speech Output** | Web SpeechSynthesis API (Tuned Natural Male Voices) |
+| **Backend API** | Vercel Serverless Functions (Node.js ES Modules) |
+| **Database** | Supabase (PostgreSQL with Row Level Security) |
+| **Deployment** | Vercel Edge Network |
+
+---
+
+## 💻 Local Setup & Development
+
+### Prerequisites
 - Node.js 20+
-- Gemini API key from https://aistudio.google.com/apikey
-- Supabase project from https://supabase.com
-- GitHub and Vercel accounts for the public live deployment
+- A Google Gemini API key ([aistudio.google.com/apikey](https://aistudio.google.com/apikey))
+- A Supabase Project ([supabase.com](https://supabase.com))
 
-## 1. Database setup
+### 1. Clone the repository
+```bash
+git clone https://github.com/nikhilpitrodanc/CampusVoice-AI.git
+cd CampusVoice-AI
+```
 
-1. Create a Supabase project.
-2. Open **SQL Editor**, paste and run [`db/schema.sql`](db/schema.sql).
-3. In **Project Settings > API**, copy the project URL and the **service_role / secret server key**. This key has elevated access, so **never put it in `VITE_*`, browser code, Git, or public screenshots**.
-
-**Use this project's schema as-is.** The alternate draft uses `ticket_code` and a different category list; those are *not compatible* with this merged release. If you already created the old demo table, use a **fresh Supabase project** for the merged version, or carefully migrate your data first. Do not drop a table containing records you need.
-
-## 2. API configuration
-
-Copy `.env.example` to `.env` and insert your own values. The environment variables are intended for **Vercel serverless functions**, not public Vite variables.
-
-| Name | Purpose |
-| --- | --- |
-| `GEMINI_API_KEY` | Server-side Gemini model access |
-| `GEMINI_MODEL` | Default `gemini-2.5-flash` (change if unavailable to your API account) |
-| `SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_SERVICE_ROLE_KEY` | Server-only Supabase privileged key |
-| `DEMO_ACCESS_CODE` | Optional code required by API requests; use for judge/demo access |
-
-## 3. Development in Google Antigravity
-
-Unzip/open the `campusvoice-ai` project folder. Open an integrated terminal:
-
+### 2. Install dependencies
 ```bash
 npm install
+```
+
+### 3. Configure Environment Variables
+Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+Fill in your credentials:
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-3.5-flash
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_secret_key_here
+```
+
+### 4. Database Setup (Supabase)
+Run the script in [`db/schema.sql`](db/schema.sql) in your Supabase SQL Editor:
+```sql
+create extension if not exists pgcrypto;
+create table if not exists public.tickets (
+  id uuid primary key default gen_random_uuid(),
+  ticket_number bigint generated by default as identity unique,
+  category text not null check (category in ('maintenance','cleanliness','it','hostel','library','academic','safety','other')),
+  department text not null,
+  location text not null,
+  description text not null,
+  raw_text text,
+  priority text not null default 'medium' check (priority in ('low','medium','high')),
+  status text not null default 'open' check (status in ('open','in_progress','resolved')),
+  student_email text,
+  incharge_name text,
+  incharge_role text,
+  incharge_email text,
+  incharge_phone text,
+  incharge_office text,
+  created_at timestamptz not null default now()
+);
+alter table public.tickets enable row level security;
+```
+
+### 5. Start Development Server
+```bash
+npm run dev
+```
+Open `http://localhost:5173` in your browser.
+
+### 6. Run Test Suite
+```bash
 npm test
-npm run build
 ```
 
-**Important:** `npm run dev` alone serves only the React frontend; `/api/*` endpoints run as Vercel functions. For a fully functional local test, install the Vercel CLI and run:
+---
 
-```bash
-npm install -g vercel
-vercel login
-vercel link
-vercel env pull .env.local
-vercel dev
-```
+## 🚢 Deployment to Vercel
 
-Open the URL printed by `vercel dev` (usually `http://localhost:3000`). If you have not configured the Vercel environment yet, use `vercel env add` for each server-side variable or configure them in the project settings, then rerun `vercel env pull .env.local`. You may also use `vercel dev --listen 3000`. Vercel CLI offers interactive configuration when first linking a project.
+1. Import your GitHub repository in [vercel.com/new](https://vercel.com/new).
+2. Choose **Vite** as the framework preset.
+3. In **Environment Variables**, provide:
+   - `GEMINI_API_KEY`
+   - `GEMINI_MODEL` (`gemini-3.5-flash`)
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+4. Click **Deploy**.
 
-## 4. Deploy to GitHub and Vercel
+---
 
-Create a **new empty** GitHub repository and, in the project directory, run:
+## 📄 License
 
-```bash
-git init
-git add .
-git commit -m "Build CampusVoice AI voice ticket assistant"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/campusvoice-ai.git
-git push -u origin main
-```
+This project is licensed under the [MIT License](LICENSE) — see the [LICENSE](LICENSE) file for details.
 
-1. In https://vercel.com/new, import the repository.
-2. Framework should be detected as **Vite**; build command `npm run build`, output `dist`.
-3. In **Project > Settings > Environment Variables**, add the variables above. Never use a `VITE_` prefix for secrets.
-4. Deploy or redeploy after setting variables.
-5. Open the production `https://...vercel.app` link in **Chrome**, allow microphone permission, and test.
-6. Submit the GitHub URL and Vercel URL before the hackathon deadline.
-
-## 5. Demo checklist
-
-1. Speak: “The AC in classroom B204 is not working, and we have an exam today.” Verify high priority and Facilities department.
-2. Confirm the AI announces a `CV-...` ticket number and shows success.
-3. Click **Service Tickets**. See the saved ticket; refresh the page to verify it persists.
-4. Change the status to **In progress** then **Resolved**.
-5. Speak: “What's the status of ticket CV-0001?” using the actual ID from the dashboard.
-6. Speak: “How many tickets are open?” Confirm the count matches non-resolved records.
-7. Try the Hindi and Gujarati language selectors. For example: “Mere Hostel A mein paani nahi aa raha hai.”
-
-## Notes and limits
-
-- This is a **demo campus help desk**, not integrated with a real college system. Ticket creation and status changes in its own Supabase database are real.
-- Tickets are shared in the demo instance; there is no user identity, departmental routing, or authentication. For a public demo, set `DEMO_ACCESS_CODE` and share that code with judges separately. Production use would require authentication, per-user authorization, rate limiting, audit logs, and stricter permissions.
-- SpeechRecognition browser support varies; Chrome desktop is the best initial demo target. Text fallback is provided if speech input is unsupported.
-- The current demo limits ticket listings to the most recent 60 and does not send actual emails. Departments are assigned as labels, not contacted.
-- If a location is missing, the app asks for one rather than inventing a room. For the clearest demo, include a location in every complaint.
-- If an API request fails, no success message is issued. Check Vercel function logs, Gemini quota/model, database table, and environment values.
+Developed with ❤️ by **Nikhil Pitroda**.
